@@ -47,7 +47,7 @@
 
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
-import { useNewsletter } from '~/plugins/composables'
+import { useNewsletter } from '~/plugins/newsletter'
 
 export default defineComponent({
   setup() {
