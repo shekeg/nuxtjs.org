@@ -28,6 +28,8 @@ const sortedBy = ssrRef('downloads', 'fuseSortedByRef')
 const selectedCategory = ssrRef(undefined, 'fuseSortByCategoryRef')
 // Amount of modules loaded
 const modulesLoaded = ssrRef(MODULE_INCREMENT_LOADING, 'fuseModulesLoadedRef')
+// Sorting options
+const sortByComp = computed(() => sortFields[sortedBy.value])
 
 /**
  * Modules helpers
@@ -38,9 +40,6 @@ export function useFuse() {
   // Context
   const route = useRoute()
   const router = useRouter()
-
-  // Sorting options
-  const sortByComp = computed(() => sortFields[sortedBy.value])
 
   // Watch local references and sync URL on changes
   watch([selectedCategory, query, orderedBy, sortedBy], () => {
@@ -55,7 +54,7 @@ export function useFuse() {
   function updateList() {
     let filteredModulesList = Object.assign([], modules.value)
 
-    // Filter modules
+    // Filter by query
     if (query.value) {
       filteredModulesList = filteredModulesList.filter(item =>
         [
@@ -94,10 +93,11 @@ export function useFuse() {
   // Initialize modules
   function init(loadedModules) {
     modules.value = loadedModules.value
+  }
 
+  function syncModules() {
     // Get selected category from hash location
     selectedCategory.value = route.value.hash.substr(1)
-    console.log(selectedCategory.value)
 
     // Get other query params
     const { q, sortBy, orderBy } = route.value.query
@@ -178,6 +178,7 @@ export function useFuse() {
     // Functions
     init,
     updateList,
+    syncModules,
     syncURL,
     getCategory,
     clearFilters,
